@@ -81,6 +81,24 @@ devMiddleware.waitUntilValid(() => {
   _resolve()
 })
 
+var request = require('request');
+app.use('*', function(req, res){
+    var url = 'http://localhost:8081' + req.originalUrl;
+    console.log("Proxy: " + url);
+    // POST or GET
+    var r = null;
+    if(req.method === 'POST') {
+        r = request.post({uri: url, json: req.body});
+    } else {
+        r = request(url);
+    }
+    // do real proxy
+	try{
+    req.pipe(r).pipe(res);
+	}catch(e){console.log('111111111111111111111111111');
+	}
+});
+
 var server = app.listen(port)
 
 module.exports = {

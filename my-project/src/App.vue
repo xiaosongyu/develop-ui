@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-    <wn-top-bar class="container-fluid"></wn-top-bar>
+    <wn-top-bar></wn-top-bar>
     <div class="container-fluid">
       <div class="row">
-        <wn-side-nav></wn-side-nav>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
+        <div class="col-sm-3 col-md-2">
+          <wn-side-nav></wn-side-nav>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" style="margin-top:10px">
+          <transition name="slide-fade">
+            <router-view></router-view>
+          </transition>
         </div>
       </div>
     </div>
@@ -14,6 +18,7 @@
 <script>
 import TopBar from './components/TopBar'
 import SideNav from './components/SideNav'
+
 export default {
   name: 'app',
   components: {
@@ -23,5 +28,23 @@ export default {
 }
 </script>
 <style>
-@import './css/framework.css'
+@import './assets/css/framework.css'
+</style>
+<style scoped>
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to
+/* .slide-fade-leave-active for <2.1.8 */
+
+{
+  transform: translateX(10px);
+  opacity: 0;
+}
 </style>

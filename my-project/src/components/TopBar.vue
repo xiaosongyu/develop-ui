@@ -1,16 +1,18 @@
 <template>
-  <div class="container-fluid navbar navbar-inverse navbar-fixed-top">
-    <el-menu theme="dark" :default-active="activeIndex" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">我的工作台</template>
-        <el-menu-item index="2-1">选项1</el-menu-item>
-        <el-menu-item index="2-2">选项2</el-menu-item>
-        <el-menu-item index="2-3">选项3</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="3"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
-    </el-menu>
-  </div>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <img class="navbar-logo" src="/static/images/main_logo.png">
+        <a class="navbar-brand" href="#">采集管理平台</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <el-menu :default-active="activeIndex" class="nav navbar-nav navbar-right" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="3">帮助</el-menu-item>
+          <el-menu-item index="3">退出</el-menu-item>
+        </el-menu>
+      </div>
+    </div>
+  </nav>
 </template>
 <script>
 export default {
@@ -27,3 +29,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+.el-menu {
+  background-color: inherit
+}
+
+.el-menu--horizontal .el-menu-item {
+  height: 55px;
+}
+</style>

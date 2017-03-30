@@ -5,11 +5,9 @@ import Menu from '@/components/Menu'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Menu',
-      component: Menu
-    }
-  ]
+  routes: [{
+    path: '/',
+    name: 'Menu',
+    component: Menu
+  }]
 })

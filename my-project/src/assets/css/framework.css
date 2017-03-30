@@ -1,0 +1,449 @@
+/*
+ * Base structure
+ */
+
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+
+body,
+div,
+span,
+select,
+option {
+  margin: 0;
+  font-size: 13px;
+  font-family: 微软雅黑;
+}
+
+body {
+  padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+
+.navbar-fixed-top {
+  border: 0;
+}
+
+
+/*
+ * Sidebar
+ */
+
+
+/* Hide for mobile, show later */
+
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+
+
+/* Sidebar navigation */
+
+.nav-sidebar {
+  margin-right: -21px;
+  /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.placeholders h4 {
+  margin-bottom: 0;
+}
+
+.placeholder {
+  margin-bottom: 20px;
+}
+
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #Fff;
+}
+
+.navbar-inverse {
+  background-color: #3395FF;
+}
+
+.navbar-brand {
+  font-family: 方正正中黑简体;
+  font-size: 24px;
+}
+
+.navbar-logo {
+  float: left;
+  margin-right: 15px;
+}
+
+
+/*list-page*/
+
+.list-btn-style {
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+
+/*列表字体大小*/
+
+.list-font {
+  font-size: 14px;
+}
+
+.list-title {
+  color: #FFFFFF;
+}
+
+.rank-show-css {
+  color: #21b7c6;
+  font-weight: bold;
+}
+
+.list-row-space {
+  margin-top: 3px;
+}
+
+.fwgl-list-font {
+  font-size: 14px;
+}
+
+.block-text-align {
+  text-align: center;
+}
+
+.list-panel-head {
+  padding: 0px 15px 0px 15px;
+  border-bottom: 0px;
+  /* height:70px; */
+}
+
+.list-panel-border {
+  border: 1px solid #21b7c6;
+}
+
+.list-title-left-col {
+  padding: 16px 0px 16px 0px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.list-title-middel-col {
+  padding: 0 0 0 0;
+}
+
+.list-title-right-col {
+  padding-left: 0px;
+  padding-right: 8px;
+}
+
+
+/*
+.list-panel-border {
+  border: 1px solid #d3d3d5;
+}*/
+
+.list-title-num {
+  font-size: 16px;
+}
+
+.list-title {
+  color: #FFFFFF;
+}
+
+.list-title-space {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.panel-bg-turquoise {
+  background-color: #21b7c6;
+}
+
+.list-title-turquoise {
+  color: #21b7c6;
+}
+
+.list-title-statu {
+  color: #898989;
+}
+
+.list-title-link {
+  margin-top: 10px;
+  display: block;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.panel-bg-green {
+  background-color: #60C660;
+}
+
+.list-panel-border-green {
+  border: 1px solid #60C660;
+}
+
+.list-title-green {
+  color: #60C660;
+}
+
+.panel-bg-red {
+  background-color: #60C660;
+}
+
+.list-panel-border-red {
+  border: 1px solid #60C660;
+}
+
+.list-title-red {
+  color: #60C660;
+}
+
+.list-panel-border-red {
+  border: 1px solid #60C660;
+}
+
+.panel-bg-gray {
+  background-color: #626262;
+}
+
+.list-panel-border-gray {
+  border: 1px solid #626262;
+}
+
+.list-title-gray {
+  color: #626262;
+}
+
+.list-panel-border-gray {
+  border: 1px solid #626262;
+}
+
+.panel-box-three {
+  background-color: #626262;
+}
+
+.panel-box-border-three {
+  border: 1px solid #626262;
+}
+
+#rqlbDiv label {
+  font-weight: normal;
+}
+
+.list-btnDiv {
+  padding-right: 15px;
+}
+
+.content_title {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #434343;
+  font-family: '微软雅黑';
+}
+
+#firstDiv a:hover,
+a:active,
+a:focus {
+  color: #21b7c6;
+  text-decoration: none;
+}
+
+#secondDiv a:hover,
+a:active,
+a:focus {
+  color: #EB6841;
+  text-decoration: none;
+}
+
+#thirdDiv a:hover,
+a:active,
+a:focus {
+  color: #626262;
+  text-decoration: none;
+}
+
+.nopadding-left {
+  padding-left: 0px;
+}
+
+.list-search-p {
+  padding-top: 6px;
+  text-align: center;
+  margin: 0px;
+}
+
+.highlight {}
+
+.block-select {
+  background: #E9FFE9;
+}
+
+.block-one {
+  cursor: pointer;
+  text-align: center;
+  padding: 14px 0 20px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.block-half-left {
+  cursor: pointer;
+  text-align: center;
+  padding: 14px 0 20px;
+  border-right: 1px solid #D3D3D5;
+}
+
+.block-half-right {
+  cursor: pointer;
+  text-align: center;
+  padding: 14px 0 20px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.counter {
+  padding-left: 15px;
+  font-size: 24px;
+}
+
+#block1 {
+  cursor: pointer;
+  padding-left: 0;
+  padding-top: 0;
+}
+
+#block2 {
+  cursor: pointer;
+  padding-left: 0;
+  padding-top: 0;
+}
+
+#block3 {
+  cursor: pointer;
+  padding-left: 0;
+  padding-top: 0;
+}
+
+.list-title-orange {
+  color: #EB6841;
+}
+
+.navbar-brand .bootstrap-table .table {
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid #dddddd;
+  border-collapse: collapse !important;
+  border-radius: 0px;
+}
+
+.table tbody tr td {
+  line-height: 1.2;
+  font-size: 12px;
+}
+
+.el-submenu .el-menu {
+  background-color: inherit;
+}
+
+.el-table td {
+  height: 30px!important;
+  font-size: 12px!important;
+}
+
+label {
+  font-weight: normal;
+}
+
+.el-tabs__header {
+  margin: 0 0 0 0!important;
+}
+
+.el-table__expand-icon {
+  height: 30px!important;
+  font-size: 12px!important;
+}
+
+.el-tabs__header {
+  border-bottom: 2px solid #3395FF!important;
+}
+
+.el-tabs__nav-wrap {
+  margin-bottom: 0px!important;
+}
