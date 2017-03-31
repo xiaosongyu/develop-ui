@@ -13,8 +13,8 @@
       <div class="col-sm-3 panel-block">
         <wn-block-chart img="/static/images/disconnect_state.png" :value="chart.disConnCount" fontColor="#57D2DD">未连接</wn-block-chart>
       </div>
-      <div class="col-sm-12 ">
-        <wn-common-search></wn-common-search>
+      <div class="col-sm-12">
+        <wn-common-search v-on:change="init"></wn-common-search>
       </div>
     </div>
   </div>
@@ -22,6 +22,7 @@
 <script>
 import StateBlockChart from '../components/StateBlockChart'
 import CommonSearch from '../components/CommonSearch'
+
 export default {
   name: 'home',
   components: {

@@ -3,9 +3,7 @@
     <wn-top-bar></wn-top-bar>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2">
-          <wn-side-nav></wn-side-nav>
-        </div>
+        <wn-side-nav></wn-side-nav>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" style="margin-top:10px">
           <transition name="slide-fade">
             <router-view></router-view>

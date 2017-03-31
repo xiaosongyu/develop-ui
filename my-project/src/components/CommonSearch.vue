@@ -16,9 +16,9 @@
         </div>
         <div class="col-md-3 col-xs-6 ">
           <div class="pull-right">
-            <el-button id="btn_query" type="danger" @click="searchTable()" icon="search">查询
+            <el-button id="btn_query" type="primary" @click="searchTable()" icon="search">查询
             </el-button>
-            <el-button id="btn_add" type="danger" style="margin-left:10px;" icon="plus">新增
+            <el-button id="btn_add" type="primary" @click="openServerDialog" style="margin-left:10px;" icon="plus">新增
             </el-button>
           </div>
         </div>
@@ -58,20 +58,39 @@
         </div>
       </div>
     </div>
+    <server-dialog ref="serverDialog" v-on:save="searchTable"></server-dialog>
   </div>
 </template>
 <script>
+import ServerDialog from '../views/ServerDialog'
+
 export default {
   name: 'common-search',
+  components: {
+    'server-dialog': ServerDialog
+  },
   data() {
     return {
+      serverDialogVisiable: false,
       search: {
         name: '',
         status: '',
         pageSize: 10,
         currentPage: 1
       },
-      selectStates: [],
+      selectStates: [{
+        value: '',
+        label: '全部'
+      }, {
+        value: 1,
+        label: '未连接'
+      }, {
+        value: 2,
+        label: '正常'
+      }, {
+        value: 4,
+        label: '采集异常'
+      }],
 
       table: {
         data: [],
@@ -86,22 +105,19 @@ export default {
     init() {
       this.error = this.post = null
       this.loading = true
-        /* get select for server status */
-      this.$http.get('/select/serverStats')
-        .then((response) => {
-          this.selectStates = response.data
-        })
       this.searchTable()
     },
     handleRefresh(index, rows) {
       this.$http.get('/carteServers/refresh/' + rows[index].id)
         .then((response) => {
           rows.splice(index, 1, response.data)
+          this.$emit('change')
         })
     },
     handleDelete(index, row) {
       this.$http.delete('/carteServers/' + row.id)
         .then((response) => {
+          this.$emit('change')
           this.searchTable()
         })
     },
@@ -120,6 +136,9 @@ export default {
     handleCurrentChange(val) {
       this.search.currentPage = val
       this.searchTable()
+    },
+    openServerDialog() {
+      this.$refs.serverDialog.open()
     }
   }
 
