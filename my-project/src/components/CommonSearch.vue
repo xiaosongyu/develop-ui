@@ -35,7 +35,10 @@
           </el-table-column>
           <el-table-column prop="address" label="地址" width="160">
           </el-table-column>
-          <el-table-column prop="status" label="状态" width="110">
+          <el-table-column label="状态" width="110">
+            <template scope="scope">
+              {{$t('server.status_'+scope.row.status)}}
+            </template>
           </el-table-column>
           <el-table-column prop="jobCount" label="作业总数" width="90" align="right">
           </el-table-column>
@@ -80,16 +83,16 @@ export default {
       },
       selectStates: [{
         value: '',
-        label: '全部'
+        label: this.$t('all')
       }, {
         value: 1,
-        label: '未连接'
+        label: this.$t('server.status_1')
       }, {
         value: 2,
-        label: '正常'
+        label: this.$t('server.status_2')
       }, {
         value: 4,
-        label: '采集异常'
+        label: this.$t('server.status_4')
       }],
 
       table: {
@@ -141,7 +144,6 @@ export default {
       this.$refs.serverDialog.open()
     }
   }
-
 }
 </script>
 <style scoped>
