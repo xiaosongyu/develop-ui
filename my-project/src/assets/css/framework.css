@@ -447,3 +447,52 @@ label {
 .el-tabs__nav-wrap {
   margin-bottom: 0px!important;
 }
+
+.el-dialog__header {
+  background-color: #0079f4!important;
+  padding: 10px 10px 8px!important;
+}
+
+.el-dialog__title {
+  line-height: 1!important;
+  font-size: 14px!important;
+  color: #fffefe!important;
+}
+
+.el-dialog__body {
+  padding: 0px 0px 0px!important;
+  background-color: #f3f4f8!important;
+  font-size: 14px!important;
+}
+
+.el-row:last-child .el-form-item {
+  margin-bottom: 0px!important;
+}
+
+.el-button--info {
+  background-color: #bdd8f5!important;
+  color: #000000!important;
+}
+
+.el-form-item {
+  margin-bottom: 10px!important;
+}
+
+.el-form-item__error {
+  padding-top: 0px!important;
+}
+
+.el-form-item__label {
+  line-height: 1!important;
+}
+
+.panel {
+  padding-top: 0px!important;
+  ;
+  margin-top: 15px!important;
+}
+
+.el-input {
+  width: initial!important;
+  padding-left: 5px!important;
+}

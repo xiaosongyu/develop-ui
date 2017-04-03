@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default">
+  <div class="panel panel-default" v-loading="loading">
     <div class="panel-heading" style="font-size:16px;color:#434343;font-weight:bold;">
       <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">采集节点列表</span>
     </div>
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <server-dialog ref="serverDialog" v-on:save="searchTable"></server-dialog>
+    <server-dialog ref="serverDialog" v-on:save="handleAdd"></server-dialog>
   </div>
 </template>
 <script>
@@ -74,6 +74,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       serverDialogVisiable: false,
       search: {
         name: '',
@@ -101,14 +102,20 @@ export default {
       }
     }
   },
-  created() {
-    this.init()
+  mounted: function() {
+    this.autoRefresh()
+
+    setInterval(function() {
+      this.autoRefresh()
+    }.bind(this), 30000)
   },
   methods: {
     init() {
-      this.error = this.post = null
-      this.loading = true
       this.searchTable()
+    },
+    handleAdd() {
+      this.searchTable()
+      this.$emit('change')
     },
     handleRefresh(index, rows) {
       this.$http.get('/carteServers/refresh/' + rows[index].id)
@@ -124,12 +131,19 @@ export default {
           this.searchTable()
         })
     },
+    handleDetail(index, row) {
+      this.$emit('detail', row.id, row.name)
+    },
     searchTable() {
       /* get default table data */
+      this.loading = true
       this.$http.post('/carteServers', this.search)
         .then((response) => {
           this.table.total = response.data.total
           this.table.data = response.data.list
+          this.loading = false
+        }).catch(function(response) {
+          this.loading = false
         })
     },
     handleSizeChange(val) {
@@ -142,21 +156,16 @@ export default {
     },
     openServerDialog() {
       this.$refs.serverDialog.open()
+    },
+    autoRefresh() {
+      console.log('-----auto refresh server status------')
+      this.searchTable()
+      this.$emit('change')
     }
   }
 }
 </script>
 <style scoped>
-.panel {
-  padding-top: 0px;
-  margin-top: 15px
-}
-
-.el-input {
-  width: initial;
-  padding-left: 5px;
-}
-
 .click {
   cursor: pointer;
   color: black

@@ -5,7 +5,7 @@
       <div class="row">
         <wn-side-nav></wn-side-nav>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" style="margin-top:10px">
-          <transition name="slide-fade">
+          <transition name="zoom" mode="out-in" enter-active-class="animated zoomIn" leave-active-class="animated bounceOutRight">
             <router-view></router-view>
           </transition>
         </div>
@@ -29,20 +29,4 @@ export default {
 @import './assets/css/framework.css'
 </style>
 <style scoped>
-.slide-fade-enter-active {
-  transition: all .3s ease;
-}
-
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-
-.slide-fade-enter,
-.slide-fade-leave-to
-/* .slide-fade-leave-active for <2.1.8 */
-
-{
-  transform: translateX(10px);
-  opacity: 0;
-}
 </style>

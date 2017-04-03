@@ -103,47 +103,11 @@ export default {
       this.$refs.dialog.open()
     },
     close() {
+      this.resetForm('form')
       this.$refs.dialog.close()
     }
   }
 }
 </script>
 <style scope>
-.el-dialog__header {
-  background-color: #0079f4;
-  padding: 10px 10px 8px;
-}
-
-.el-dialog__title {
-  line-height: 1;
-  font-size: 14px;
-  color: #fffefe;
-}
-
-.el-dialog__body {
-  padding: 0px 0px 0px;
-  background-color: #f3f4f8;
-  font-size: 14px;
-}
-
-.el-row:last-child .el-form-item {
-  margin-bottom: 0px;
-}
-
-.el-button--info {
-  background-color: #bdd8f5;
-  color: #000000;
-}
-
-.el-form-item {
-  margin-bottom: 10px;
-}
-
-.el-form-item__error {
-  padding-top: 0px;
-}
-
-.el-form-item__label {
-  line-height: 1;
-}
 </style>

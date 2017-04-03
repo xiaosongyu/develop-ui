@@ -3,12 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
 import VueRouter from 'vue-router'
 import Home from './views/Home'
 import Hello from './views/Hello'
 import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
+import 'element-ui/lib/theme-default/index.css'
+import 'animate.css/animate.min.css'
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
@@ -22,6 +23,11 @@ const data = {
     status_1: '未连接',
     status_2: '正常',
     status_4: '采集异常'
+  },
+  job: {
+    status_0: '未执行',
+    status_8: '执行中',
+    status_32: '执行完成'
   }
 }
 

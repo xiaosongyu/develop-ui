@@ -17,6 +17,9 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
+    <div @click="greet">
+      <button type="button" @click.stop="greet">Click Me!</button>
+    </div>
   </div>
 </template>
 <script>
@@ -25,6 +28,11 @@ export default {
   data() {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods: {
+    greet(event) {
+      alert(event.target.tagName)
     }
   }
 }
