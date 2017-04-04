@@ -25,8 +25,5 @@ export default {
   }
 }
 </script>
-<style>
-@import './assets/css/framework.css'
-</style>
 <style scoped>
 </style>

@@ -10,6 +10,8 @@ import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-default/index.css'
 import 'animate.css/animate.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/css/framework.css'
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
@@ -25,10 +27,16 @@ const data = {
     status_4: '采集异常'
   },
   job: {
-    status_0: '未执行',
+    status_0: '未开始',
     status_8: '执行中',
-    status_32: '执行完成'
+    status_32: '完成',
+    status_33: '完成(错误)'
+  },
+  error: {
+    1002: '节点名称已存在',
+    2001: '作业名称已存在'
   }
+
 }
 
 Vue.locale('zh-cn', data)
@@ -41,10 +49,27 @@ var router = new VueRouter({
   ]
 })
 
-/* eslint-disable no-new */
-new Vue({
+var vm = new Vue({
   el: '#app',
   router: router,
-  template: '<App/>',
+  template: '<App/></App>',
   components: { App }
+})
+
+Vue.http.interceptors.push((request, next) => {
+  let loading = vm.$loading({ text: '拼命加载中', fullscreen: false })
+  next((response) => {
+    if (!response.ok) {
+      var errorMsg = '系统错误，请联系管理员'
+      if (Number.isInteger(response.data)) {
+        errorMsg = vm.$t('error.' + response.data)
+      }
+      vm.$alert(errorMsg, '警告', {
+        confirmButtonText: '确定',
+        type: 'error'
+      })
+    }
+    loading.close()
+    return response
+  })
 })

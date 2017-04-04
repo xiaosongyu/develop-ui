@@ -65,7 +65,4 @@ export default {
 }
 </script>
 <style scoped>
-.panel {
-  padding-top: 15px;
-}
 </style>

@@ -6,21 +6,21 @@
         <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">采集节点详情</span>
       </div>
       <el-row style="margin:10px">
-        <el-col :span="6"> <span class="label">节点名称:</span> <span>{{server.name}}</span></el-col>
-        <el-col :span="6"> <span class="label">节点状态:</span> <span>{{status}}</span></el-col>
-        <el-col :span="6"> <span class="label">节点地址:</span> <span>{{server.address}}</span></el-col>
+        <el-col :span="6"> <span class="labelNew">节点名称:</span> <span>{{server.name}}</span></el-col>
+        <el-col :span="5"> <span class="labelNew">节点状态:</span> <span>{{status}}</span></el-col>
+        <el-col :span="8"> <span class="labelNew">节点地址:</span> <span>{{server.address}}</span></el-col>
       </el-row>
       <el-row style="margin:10px">
-        <el-col :span="6"> <span class="label">操作系统:</span> <span>{{server.osName}}</span></el-col>
-        <el-col :span="6"> <span class="label">运行时间:</span> <span>{{uptime}}</span></el-col>
-        <el-col :span="6"> <span class="label">CPU核数:</span> <span>{{server.cpuCores}}</span></el-col>
-        <el-col :span="6"> <span class="label">线程总数:</span> <span>{{server.threadCount}}</span></el-col>
+        <el-col :span="6"> <span class="labelNew">操作系统:</span> <span>{{server.osName}}</span></el-col>
+        <el-col :span="5"> <span class="labelNew">运行时间:</span> <span>{{uptime}}</span></el-col>
+        <el-col :span="5"> <span class="labelNew">CPU核数:</span> <span>{{server.cpuCores}}</span></el-col>
+        <el-col :span="8"> <span class="labelNew">线程总数:</span> <span>{{server.threadCount}}</span></el-col>
       </el-row>
       <el-row style="margin:10px">
-        <el-col :span="6"> <span class="label">剩余内存:</span> <span>{{memoryFree}}</span></el-col>
-        <el-col :span="6"> <span class="label">最大内存:</span> <span>{{memoryTotal}}</span></el-col>
-        <el-col :span="6"> <span class="label">作业总数:</span> <span>{{server.totalJobCount}}</span></el-col>
-        <el-col :span="6"> <span class="label">更新时间:</span> <span>{{server.updateTm}}</span></el-col>
+        <el-col :span="6"> <span class="labelNew">剩余内存:</span> <span>{{memoryFree}}</span></el-col>
+        <el-col :span="5"> <span class="labelNew">最大内存:</span> <span>{{memoryTotal}}</span></el-col>
+        <el-col :span="5"> <span class="labelNew">作业总数:</span> <span>{{server.jobCount}}</span></el-col>
+        <el-col :span="8"> <span class="labelNew">更新时间:</span> <span>{{server.updateTm}}</span></el-col>
       </el-row>
     </div>
     <div class="panel panel-default">
@@ -33,41 +33,45 @@
             <label>作业名称：</label>
             <el-input size="small" v-model="search.jobName"></el-input>
             <label style="padding-left:20px">状态：</label>
-            <el-select v-model="search.status" placeholder="请选择">
+            <el-select v-model="search.lastRunStatus" placeholder="请选择">
               <el-option v-for="item in selectStates" :label="item.label" :value="item.value" :key="item.value">
               </el-option>
             </el-select>
           </div>
           <div class="col-md-3 col-xs-6 ">
             <div class="pull-right">
-              <el-button id="btn_query" type="primary" icon="search">查询
+              <el-button id="btn_query" type="primary" @click="handleSearch" icon="search">查询
               </el-button>
-              <el-button id="btn_add" type="primary" style="margin-left:10px;" icon="plus">新增
+              <el-button id="btn_add" type="primary" @click="openJobDialog" style="margin-left:10px;" icon="plus">新增
               </el-button>
             </div>
           </div>
         </div>
         <el-table :data="server.jobTable.list" border>
-          <el-table-column type="expand">
-            <template scope="props">
-              <el-form label-position="left" inline class="demo-table-expand">
-              </el-form>
-            </template>
+          <el-table-column type="selection" width="55">
           </el-table-column>
-          <el-table-column prop="name" label="作业名称" min-width="100">
+          <el-table-column prop="jobName" label="作业名称" min-width="100">
           </el-table-column>
-          <el-table-column label="状态" width="110">
+          <el-table-column prop="cronExp" label="调度时间表达式" width="160">
+          </el-table-column>
+          <el-table-column label="最后执行状态" width="130">
             <template scope="scope">
-              {{$t('job.status_'+scope.row.status)}}
+              {{$t('job.status_'+scope.row.lastRunStatus)}}
             </template>
           </el-table-column>
-          <el-table-column prop="readCount" label="读笔数" min-width="60">
+          <el-table-column prop="writeCount" label="错误信息" width="100">
           </el-table-column>
-          <el-table-column prop="writeCount" label="写笔数" min-width="60">
+          <el-table-column prop="logDate" label="执行时间" width="180">
           </el-table-column>
-          <el-table-column prop="errorCount" label="失败笔数" min-width="60">
-          </el-table-column>
-          <el-table-column prop="logDate" label="最后记录时间" min-width="100">
+          <el-table-column label="操作" width="190">
+            <template scope="scope">
+              <img src="/static/images/table_info.png" style="vertical-align: sub" alt="" />
+              <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleDetail(scope.$index, scope.row)">详情</el-button>|
+              <img src="/static/images/table_refresh.png" style="vertical-align: sub" alt="" />
+              <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleRefresh(scope.$index, table.data)">执行</el-button>|
+              <img src="/static/images/table_delete.png" style="vertical-align: sub" alt="" />
+              <el-button type="text" size="small" class="click" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -91,8 +95,9 @@ export default {
         }
       },
       search: {
+        serverId: '',
         jobName: '',
-        status: '',
+        lastRunStatus: '',
         pageSize: 10,
         currentPage: 1
       },
@@ -108,30 +113,51 @@ export default {
       }, {
         value: 32,
         label: this.$t('job.status_32')
+      }, {
+        value: 33,
+        label: this.$t('job.status_33')
       }]
     }
   },
   mounted() {
+    this.search.serverId = this.serverId
     this.init()
   },
   methods: {
     init() {
-      this.loading = true
       this.$http.post('/carteServers/detail/' + this.serverId, this.search)
         .then((response) => {
           this.server = response.data
-          this.loading = false
-        }).catch(function(response) {
-          this.loading = false
         })
     },
     refresh() {
-      this.loading = true
       this.$http.get('/carteServers/refresh/' + this.serverId)
         .then((response) => {
           this.init()
-        }).catch(function(response) {
+        })
+    },
+    handleSearch() {
+      this.$http.post('/carteJobs', this.search)
+        .then((response) => {
+          this.server.jobTable.list = response.data.list
           this.loading = false
+        })
+    },
+    handleDelete(index, row) {
+      this.$http.delete('/carteJobs/' + row.id)
+        .then((response) => {
+          this.init()
+        })
+    },
+    openJobDialog() {
+      let job = {
+        serverId: 1,
+        jobName: '测试作业',
+        cronExp: '0/10 * * ? ? *'
+      }
+      this.$http.post('/carteJobs/add', job)
+        .then((response) => {
+          this.handleSearch()
         })
     }
   },
@@ -152,9 +178,8 @@ export default {
 }
 </script>
 <style scoped>
-.label {
+.labelNew {
   color: #898989;
   text-align: right;
-  font-size: 15px;
 }
 </style>

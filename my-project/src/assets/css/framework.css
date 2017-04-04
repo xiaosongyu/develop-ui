@@ -215,7 +215,7 @@ body {
 
 /*
 .list-panel-border {
-  border: 1px solid #d3d3d5;
+	border: 1px solid #d3d3d5;
 }*/
 
 .list-title-num {
@@ -488,8 +488,8 @@ label {
 
 .panel {
   padding-top: 0px!important;
-  ;
-  margin-top: 15px!important;
+  margin-top: 10px!important;
+  margin-bottom: 10px!important;
 }
 
 .el-input {

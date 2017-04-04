@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default" v-loading="loading">
+  <div class="panel panel-default">
     <div class="panel-heading" style="font-size:16px;color:#434343;font-weight:bold;">
       <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">采集节点列表</span>
     </div>
@@ -74,7 +74,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       serverDialogVisiable: false,
       search: {
         name: '',
@@ -107,7 +106,7 @@ export default {
 
     setInterval(function() {
       this.autoRefresh()
-    }.bind(this), 30000)
+    }.bind(this), 60000)
   },
   methods: {
     init() {
@@ -136,14 +135,10 @@ export default {
     },
     searchTable() {
       /* get default table data */
-      this.loading = true
       this.$http.post('/carteServers', this.search)
         .then((response) => {
           this.table.total = response.data.total
           this.table.data = response.data.list
-          this.loading = false
-        }).catch(function(response) {
-          this.loading = false
         })
     },
     handleSizeChange(val) {
