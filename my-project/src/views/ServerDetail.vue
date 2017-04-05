@@ -52,11 +52,11 @@
           </el-table-column>
           <el-table-column prop="jobName" label="作业名称" min-width="100">
           </el-table-column>
-          <el-table-column prop="cronExp" label="调度时间表达式" width="160">
+          <el-table-column prop="cronExp" label="执行时间表达式" width="160">
           </el-table-column>
           <el-table-column label="最后执行状态" width="130">
             <template scope="scope">
-              {{$t('job.status_'+scope.row.lastRunStatus)}}
+              {{$t('job_obj.status_'+scope.row.lastRunStatus)}}
             </template>
           </el-table-column>
           <el-table-column prop="writeCount" label="错误信息" width="100">
@@ -76,11 +76,16 @@
         </el-table>
       </div>
     </div>
+    <job-dialog ref="jobDialog"></job-dialog>
   </div>
 </template>
 <script>
+import JobDialog from '../views/JobDialog'
 export default {
   name: 'serverDetail',
+  components: {
+    'job-dialog': JobDialog
+  },
   props: {
     serverId: Number
   },
@@ -106,16 +111,16 @@ export default {
         label: this.$t('all')
       }, {
         value: 0,
-        label: this.$t('job.status_0')
+        label: this.$t('job_obj.status_0')
       }, {
         value: 8,
-        label: this.$t('job.status_8')
+        label: this.$t('job_obj.status_8')
       }, {
         value: 32,
-        label: this.$t('job.status_32')
+        label: this.$t('job_obj.status_32')
       }, {
         value: 33,
-        label: this.$t('job.status_33')
+        label: this.$t('job_obj.status_33')
       }]
     }
   },
@@ -150,15 +155,17 @@ export default {
         })
     },
     openJobDialog() {
-      let job = {
-        serverId: 1,
-        jobName: '测试作业',
-        cronExp: '0/10 * * ? ? *'
-      }
-      this.$http.post('/carteJobs/add', job)
-        .then((response) => {
-          this.handleSearch()
-        })
+      /* let job = {
+             serverId: 1,
+             jobName: '测试作业',
+             cronExp: '0/10 * * ? ? *'
+           }
+           this.$http.post('/carteJobs/add', job)
+             .then((response) => {
+               this.handleSearch()
+             })
+         } */
+      this.$refs.jobDialog.open()
     }
   },
   computed: {

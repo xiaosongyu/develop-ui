@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import VueRouter from 'vue-router'
 import Home from './views/Home'
 import Hello from './views/Hello'
+import TreeView from './components/TreeView'
 import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-default/index.css'
@@ -26,7 +27,7 @@ const data = {
     status_2: '正常',
     status_4: '采集异常'
   },
-  job: {
+  job_obj: {
     status_0: '未开始',
     status_8: '执行中',
     status_32: '完成',
@@ -35,8 +36,10 @@ const data = {
   error: {
     1002: '节点名称已存在',
     2001: '作业名称已存在'
-  }
-
+  },
+  'folder': '文件夹',
+  'job': '作业',
+  'transformation': '转换'
 }
 
 Vue.locale('zh-cn', data)
@@ -45,7 +48,8 @@ var router = new VueRouter({
   routes: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: Home },
-    { path: '/hello', component: Hello }
+    { path: '/hello', component: Hello },
+    { path: '/repository', component: TreeView }
   ]
 })
 
