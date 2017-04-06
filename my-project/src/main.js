@@ -6,7 +6,6 @@ import ElementUI from 'element-ui'
 import VueRouter from 'vue-router'
 import Home from './views/Home'
 import Hello from './views/Hello'
-import TreeView from './components/TreeView'
 import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
 import 'element-ui/lib/theme-default/index.css'
@@ -48,8 +47,7 @@ var router = new VueRouter({
   routes: [
     { path: '/', redirect: '/home' },
     { path: '/home', component: Home },
-    { path: '/hello', component: Hello },
-    { path: '/repository', component: TreeView }
+    { path: '/hello', component: Hello }
   ]
 })
 

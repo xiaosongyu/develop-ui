@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="新增采集节点" ref="dialog" :rules="rules">
+  <el-dialog title="新增采集节点" ref="dialog">
     <el-form :model="form" ref="form" :rules="rules">
       <el-tabs type="border-card">
         <el-tab-pane label="节点信息">

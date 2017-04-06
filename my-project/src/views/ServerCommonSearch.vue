@@ -25,11 +25,7 @@
       </div>
       <div class="first">
         <el-table :data="table.data" border>
-          <el-table-column type="expand">
-            <template scope="props">
-              <el-form label-position="left" inline class="demo-table-expand">
-              </el-form>
-            </template>
+          <el-table-column type="index" width="50">
           </el-table-column>
           <el-table-column prop="name" label="节点名称" min-width="100">
           </el-table-column>

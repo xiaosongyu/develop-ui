@@ -6,7 +6,7 @@
       <el-row style="margin:5px">
         <el-col :span="7">
           <div id="panel" style="border:5px solid #d1dbe5">
-            <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick" style="height:250px"></el-tree>
+            <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick" style="height:250px" :render-content="treeRender"></el-tree>
           </div>
         </el-col>
         <el-col :span="17">
@@ -32,11 +32,11 @@
       </el-row>
     </div>
     <div v-show="!show" style="margin:10px" label-position="right">
-      <el-form :model="form" ref="form">
-        <el-form-item label="作业路径" style="margin-left:42px">
-          <el-input v-model="form.jobPath" size="small" disabled style="width:230px!important"></el-input>
+      <el-form :model="form" ref="form" :rules="rules">
+        <el-form-item label="作业路径" style="margin-left:28px" prop="path">
+          <el-input v-model="form.path" size="small" readonly style="width:230px!important"></el-input>
         </el-form-item>
-        <el-form-item label="作业名称" style="margin-left:42px">
+        <el-form-item label="作业名称" style="margin-left:28px" prop="jobName">
           <el-input v-model="form.jobName " size="small" style="width:230px!important"></el-input>
         </el-form-item>
         <el-form-item label="执行时间表达式">
@@ -51,7 +51,7 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="primary " @click="next" v-show="show" :disabled="nextDisable">下一步</el-button>
       <el-button type="primary " @click="back" v-show="!show">上一步</el-button>
-      <el-button type="primary " @click="save" v-show="!show">保存</el-button>
+      <el-button type="primary " @click="submitForm('form')" v-show="!show">保存</el-button>
       <el-button type="primary " @click="close">退出</el-button>
     </div>
   </el-dialog>
@@ -59,6 +59,9 @@
 <script>
 export default {
   name: 'jobDialog',
+  props: {
+    serverId: Number
+  },
   data() {
     return {
       nextDisable: true,
@@ -72,6 +75,8 @@ export default {
       }],
       items: [],
       form: {
+        serverId: '',
+        path: '',
         jobName: '',
         cronExp: '',
         jobDesc: ''
@@ -80,7 +85,17 @@ export default {
         children: 'children',
         label: 'label'
       },
-      currentRow: null
+      currentRow: null,
+      rules: {
+        path: {
+          required: true,
+          message: '作业路径不可为空'
+        },
+        jobName: {
+          required: true,
+          message: '请输入作业名称'
+        }
+      }
     }
   },
   methods: {
@@ -102,12 +117,34 @@ export default {
       this.$refs.dialog.open()
     },
     close() {
+      this.clear()
       this.$refs.dialog.close()
     },
+    clear() {
+      this.nextDisable = true
+      this.show = true
+      this.currentPath.path = '/'
+      this.form.path = ''
+      this.form.jobName = ''
+      this.form.cronExp = ''
+      this.form.jobDesc = ''
+    },
     next() {
+      this.form.path = this.currentRow.objectId
       this.show = !this.show
     },
-    save() {},
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.form.serverId = this.serverId
+          this.$http.post('/carteJobs/add', this.form)
+            .then((response) => {
+              this.$emit('save')
+              this.close()
+            })
+        }
+      })
+    },
     back() {
       this.show = !this.show
     },
@@ -122,6 +159,19 @@ export default {
       } else {
         this.nextDisable = true
       }
+    },
+    treeRender(h, vm) {
+      return h(
+        'div', {
+          'class': {
+            'glyphicon': true,
+            'glyphicon-folder-open': true
+          },
+          domProps: {
+            innerHTML: '<span style="margin-left:10px">' + vm.node.label + '</span>'
+          }
+        }
+      )
     }
   },
   computed: {

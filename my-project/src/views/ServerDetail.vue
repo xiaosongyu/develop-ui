@@ -1,10 +1,10 @@
 <template>
   <div style="margin-top:10px" v-loading="loading">
-    <el-button id="btn_query" type="primary" @click="refresh" class="glyphicon glyphicon-refresh"> 获取最新节点信息</el-button>
     <div id="serverDetail" class="panel panel-default" style="margin-top:10px">
       <div class="panel-heading" style="font-size:16px;color:#434343;font-weight:bold;">
         <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">采集节点详情</span>
       </div>
+      <el-button id="btn_query" type="primary" @click="refresh" style="margin:2px 15px 2px 2px;height:33px" class="glyphicon glyphicon-refresh pull-right">获取最新节点信息</el-button>
       <el-row style="margin:10px">
         <el-col :span="6"> <span class="labelNew">节点名称:</span> <span>{{server.name}}</span></el-col>
         <el-col :span="5"> <span class="labelNew">节点状态:</span> <span>{{status}}</span></el-col>
@@ -48,7 +48,13 @@
           </div>
         </div>
         <el-table :data="server.jobTable.list" border>
-          <el-table-column type="selection" width="55">
+          <el-table-column type="expand">
+            <template scope="prop">
+              <el-row style="margin:10px">
+                <el-col :span="6"> <span class="labelNew">作业路径:</span> <span>{{prop.row.path}}</span></el-col>
+                <el-col :span="5"> <span class="labelNew">作业描述:</span> <span>{{prop.row.jobDesc}}</span></el-col>
+              </el-row>
+            </template>
           </el-table-column>
           <el-table-column prop="jobName" label="作业名称" min-width="100">
           </el-table-column>
@@ -76,7 +82,7 @@
         </el-table>
       </div>
     </div>
-    <job-dialog ref="jobDialog"></job-dialog>
+    <job-dialog ref="jobDialog" :serverId="serverId" v-on:save="handleAdd"></job-dialog>
   </div>
 </template>
 <script>
@@ -155,17 +161,10 @@ export default {
         })
     },
     openJobDialog() {
-      /* let job = {
-             serverId: 1,
-             jobName: '测试作业',
-             cronExp: '0/10 * * ? ? *'
-           }
-           this.$http.post('/carteJobs/add', job)
-             .then((response) => {
-               this.handleSearch()
-             })
-         } */
       this.$refs.jobDialog.open()
+    },
+    handleAdd() {
+      this.handleSearch()
     }
   },
   computed: {
