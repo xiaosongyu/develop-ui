@@ -70,6 +70,7 @@ export default {
   },
   data() {
     return {
+      confirm: false,
       serverDialogVisiable: false,
       search: {
         name: '',
@@ -120,11 +121,17 @@ export default {
         })
     },
     handleDelete(index, row) {
-      this.$http.delete('/carteServers/' + row.id)
-        .then((response) => {
-          this.$emit('change')
-          this.searchTable()
-        })
+      this.$confirm(this.$t('confirm_delete'), '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.delete('/carteServers/' + row.id)
+          .then((response) => {
+            this.$emit('change')
+            this.searchTable()
+          })
+      })
     },
     handleDetail(index, row) {
       this.$emit('detail', row.id, row.name)

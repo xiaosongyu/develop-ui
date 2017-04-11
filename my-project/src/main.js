@@ -34,11 +34,14 @@ const data = {
   },
   error: {
     1002: '节点名称已存在',
-    2001: '作业名称已存在'
+    2001: '作业名称已存在',
+    2002: '无效的时间表达式',
+    3002: '执行失败'
   },
   'folder': '文件夹',
   'job': '作业',
-  'transformation': '转换'
+  'transformation': '转换',
+  'confirm_delete': '此操作将永久删除记录，是否继续?'
 }
 
 Vue.locale('zh-cn', data)
@@ -63,8 +66,8 @@ Vue.http.interceptors.push((request, next) => {
   next((response) => {
     if (!response.ok) {
       var errorMsg = '系统错误，请联系管理员'
-      if (Number.isInteger(response.data)) {
-        errorMsg = vm.$t('error.' + response.data)
+      if (Number.isInteger(response.data.errorCode)) {
+        errorMsg = vm.$t('error.' + response.data.errorCode)
       }
       vm.$alert(errorMsg, '警告', {
         confirmButtonText: '确定',

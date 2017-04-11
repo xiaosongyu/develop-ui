@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="'新增作业'+step" ref="dialog">
-    <el-popover ref="popover1" placement="top-start" title="例子" width="200" trigger="hover" content="0 0 12 * * ? (每天中午12点触发)">
+    <el-popover ref="timeTip" placement="top-start" title="例子" width="200" trigger="hover" content="0 0 12 * * ? (每天中午12点触发)">
     </el-popover>
     <div v-show="show">
       <el-row style="margin:5px">
@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item label="执行时间表达式">
           <el-input v-model="form.cronExp" size="small" style="width:230px!important"></el-input>
-          <i class="el-icon-information" v-popover:popover1></i>
+          <i class="el-icon-information" v-popover:timeTip></i>
         </el-form-item>
         <el-form-item label="描述" style="margin-left:75px">
           <el-input v-model="form.jobDesc" size="small" type="textarea" :rows="2"></el-input>
@@ -131,6 +131,8 @@ export default {
     },
     next() {
       this.form.path = this.currentRow.objectId
+      this.form.jobName = this.currentRow.name
+      this.form.jobDesc = this.currentRow.desc
       this.show = !this.show
     },
     submitForm(formName) {

@@ -1,10 +1,10 @@
 <template>
-  <div style="margin-top:10px" v-loading="loading">
+  <div style="margin-top:10px">
+    <el-button id="btn_query" type="primary" @click="refresh" style="margin:2px 15px 2px 2px" class="glyphicon glyphicon-refresh pull-right">获取最新节点信息</el-button>
     <div id="serverDetail" class="panel panel-default" style="margin-top:10px">
       <div class="panel-heading" style="font-size:16px;color:#434343;font-weight:bold;">
         <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">采集节点详情</span>
       </div>
-      <el-button id="btn_query" type="primary" @click="refresh" style="margin:2px 15px 2px 2px;height:33px" class="glyphicon glyphicon-refresh pull-right">获取最新节点信息</el-button>
       <el-row style="margin:10px">
         <el-col :span="6"> <span class="labelNew">节点名称:</span> <span>{{server.name}}</span></el-col>
         <el-col :span="5"> <span class="labelNew">节点状态:</span> <span>{{status}}</span></el-col>
@@ -51,7 +51,7 @@
           <el-table-column type="expand">
             <template scope="prop">
               <el-row style="margin:10px">
-                <el-col :span="6"> <span class="labelNew">作业路径:</span> <span>{{prop.row.path}}</span></el-col>
+                <el-col :span="10"> <span class="labelNew">作业路径:</span> <span>{{prop.row.path}}</span></el-col>
                 <el-col :span="5"> <span class="labelNew">作业描述:</span> <span>{{prop.row.jobDesc}}</span></el-col>
               </el-row>
             </template>
@@ -74,7 +74,7 @@
               <img src="/static/images/table_info.png" style="vertical-align: sub" alt="" />
               <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleDetail(scope.$index, scope.row)">详情</el-button>|
               <img src="/static/images/table_refresh.png" style="vertical-align: sub" alt="" />
-              <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleRefresh(scope.$index, table.data)">执行</el-button>|
+              <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleExecution(scope.$index,scope.row)">执行</el-button>|
               <img src="/static/images/table_delete.png" style="vertical-align: sub" alt="" />
               <el-button type="text" size="small" class="click" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -97,7 +97,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       server: {
         status: 1,
         jobTable: {
@@ -151,14 +150,28 @@ export default {
       this.$http.post('/carteJobs', this.search)
         .then((response) => {
           this.server.jobTable.list = response.data.list
-          this.loading = false
+        })
+    },
+    handleExecution(index, row) {
+      this.$http.post('/carteJobs/run/' + row.id)
+        .then((response) => {
+          this.$alert('执行成功', '执行结果', {
+            confirmButtonText: '确定',
+            type: 'success'
+          })
         })
     },
     handleDelete(index, row) {
-      this.$http.delete('/carteJobs/' + row.id)
-        .then((response) => {
-          this.init()
-        })
+      this.$confirm(this.$t('confirm_delete'), '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.delete('/carteJobs/' + row.id)
+          .then((response) => {
+            this.init()
+          })
+      })
     },
     openJobDialog() {
       this.$refs.jobDialog.open()
