@@ -83,7 +83,7 @@ devMiddleware.waitUntilValid(() => {
 
 var request = require('request');
 app.use('*', function(req, res){
-    var url = 'http://localhost:8081' + req.originalUrl;
+    var url = 'http://127.0.0.1:8081' + req.originalUrl;
     console.log("Proxy: " + url);
     // POST or GET
     var r = null;

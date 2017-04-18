@@ -60,14 +60,13 @@
           </el-table-column>
           <el-table-column prop="cronExp" label="执行时间表达式" width="160">
           </el-table-column>
-          <el-table-column label="最后执行状态" width="130">
+          <el-table-column label="当前状态" width="130">
             <template scope="scope">
               {{$t('job_obj.status_'+scope.row.lastRunStatus)}}
             </template>
           </el-table-column>
-          <el-table-column prop="writeCount" label="错误信息" width="100">
+          <el-table-column prop="carteJobId" label="远程节点标识" width="295">
           </el-table-column>
-          <el-table-column prop="logDate" label="执行时间" width="180">
           </el-table-column>
           <el-table-column label="操作" width="190">
             <template scope="scope">
@@ -80,23 +79,32 @@
             </template>
           </el-table-column>
         </el-table>
+        <div style="text-align: center;padding:12px">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 15, 20,50]" :page-size="search.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="server.jobTable.total">
+          </el-pagination>
+        </div>
       </div>
     </div>
     <job-dialog ref="jobDialog" :serverId="serverId" v-on:save="handleAdd"></job-dialog>
+    <job-history-dialog ref="jobHistoryDialog"></job-history-dialog>
   </div>
 </template>
 <script>
 import JobDialog from '../views/JobDialog'
+import JobHistoryDialog from '../views/JobHistoryDialog'
+
 export default {
   name: 'serverDetail',
   components: {
-    'job-dialog': JobDialog
+    'job-dialog': JobDialog,
+    'job-history-dialog': JobHistoryDialog
   },
   props: {
     serverId: Number
   },
   data() {
     return {
+      jobId: 0,
       server: {
         status: 1,
         jobTable: {
@@ -108,6 +116,7 @@ export default {
         serverId: '',
         jobName: '',
         lastRunStatus: '',
+        sort: 'id|asc',
         pageSize: 10,
         currentPage: 1
       },
@@ -155,11 +164,16 @@ export default {
     handleExecution(index, row) {
       this.$http.post('/carteJobs/run/' + row.id)
         .then((response) => {
-          this.$alert('执行成功', '执行结果', {
+          this.$alert('开始执行', '执行结果', {
             confirmButtonText: '确定',
             type: 'success'
           })
+          this.handleSearch()
         })
+    },
+    handleDetail(index, row) {
+      this.$refs.jobHistoryDialog.init(row.id, row.jobName)
+      this.$refs.jobHistoryDialog.open()
     },
     handleDelete(index, row) {
       this.$confirm(this.$t('confirm_delete'), '提示', {
@@ -173,10 +187,18 @@ export default {
           })
       })
     },
-    openJobDialog() {
+    openJobDialog(index, row) {
       this.$refs.jobDialog.open()
     },
     handleAdd() {
+      this.handleSearch()
+    },
+    handleSizeChange(val) {
+      this.search.pageSize = val
+      this.handleSearch()
+    },
+    handleCurrentChange(val) {
+      this.search.currentPage = val
       this.handleSearch()
     }
   },

@@ -34,9 +34,12 @@ const data = {
   },
   error: {
     1002: '节点名称已存在',
+    1003: '节点无法连接',
     2001: '作业名称已存在',
     2002: '无效的时间表达式',
-    3002: '执行失败'
+    3002: '执行失败',
+    3003: '作业正在执行，无法重复执行作业',
+    3004: '无法获取作业执行日志,请稍后再试'
   },
   'folder': '文件夹',
   'job': '作业',
@@ -62,11 +65,14 @@ var vm = new Vue({
 })
 
 Vue.http.interceptors.push((request, next) => {
-  let loading = vm.$loading({ text: '拼命加载中', fullscreen: false })
+  let loading
+  if (request.loading !== false) {
+    loading = vm.$loading({ text: '拼命加载中', fullscreen: false })
+  }
   next((response) => {
     if (!response.ok) {
       var errorMsg = '系统错误，请联系管理员'
-      if (Number.isInteger(response.data.errorCode)) {
+      if (Number.isInteger(response.data.errorCode) && response.data.errorCode !== 0) {
         errorMsg = vm.$t('error.' + response.data.errorCode)
       }
       vm.$alert(errorMsg, '警告', {
@@ -74,7 +80,9 @@ Vue.http.interceptors.push((request, next) => {
         type: 'error'
       })
     }
-    loading.close()
+    if (loading) {
+      loading.close()
+    }
     return response
   })
 })
