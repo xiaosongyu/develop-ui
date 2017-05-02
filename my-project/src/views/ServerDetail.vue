@@ -28,31 +28,46 @@
         <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">作业列表</span>
       </div>
       <div id="tab_content" class="tab-content">
-        <div class="row panel-body tab-pane fade in active">
-          <div class="col-md-9 col-xs-6">
-            <label>作业名称：</label>
-            <el-input size="small" v-model="search.jobName"></el-input>
-            <label style="padding-left:20px">状态：</label>
-            <el-select v-model="search.lastRunStatus" placeholder="请选择">
-              <el-option v-for="item in selectStates" :label="item.label" :value="item.value" :key="item.value">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="col-md-3 col-xs-6 ">
+        <div class="panel-body tab-pane fade in active">
+          <el-row :gutter="10">
+            <el-col :sm="10" :md="8" :lg="7">
+              <label>作业名称：</label>
+              <el-input size="small" v-model="search.jobName"></el-input>
+            </el-col>
+            <el-col :sm="11" :md="9" :lg="8">
+              <label style="padding-left:20px">状态：</label>
+              <el-select v-model="search.lastRunStatus" placeholder="请选择">
+                <el-option v-for="item in selectStates" :label="item.label" :value="item.value" :key="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
             <div class="pull-right">
               <el-button id="btn_query" type="primary" @click="handleSearch" icon="search">查询
               </el-button>
               <el-button id="btn_add" type="primary" @click="openJobDialog" style="margin-left:10px;" icon="plus">新增
               </el-button>
             </div>
-          </div>
+          </el-row>
         </div>
-        <el-table :data="server.jobTable.list" border>
+        <el-table :data="server.jobTable.list" border @expand="handleExpand">
           <el-table-column type="expand">
-            <template scope="prop">
+            <template scope="scope">
               <el-row style="margin:10px">
-                <el-col :span="10"> <span class="labelNew">作业路径:</span> <span>{{prop.row.path}}</span></el-col>
-                <el-col :span="5"> <span class="labelNew">作业描述:</span> <span>{{prop.row.jobDesc}}</span></el-col>
+                <el-col :span="10"> <span class="labelNew">作业路径:</span> <span>{{scope.row.path}}</span></el-col>
+                <el-col :span="12"> <span class="labelNew">远程作业标识:</span> <span>{{scope.row.carteJobId}}</span></el-col>
+                <el-col :span="24" style="margin-top:10px"> <span class="labelNew">作业参数:</span><span>{{showjobParams?'':'无'}}</span></el-col>
+                <el-col :span="24">
+                  <el-table :data="jobParams" v-if="showjobParams">
+                    <el-table-column prop="parameter" label="参数名称" min-width="160">
+                    </el-table-column>
+                    <el-table-column prop="defaultValue" label="默认值" width="160">
+                    </el-table-column>
+                    <el-table-column prop="value" label="值" width="160">
+                    </el-table-column>
+                    <el-table-column prop="desc" label="描述" min-width="250">
+                    </el-table-column>
+                  </el-table>
+                </el-col>
               </el-row>
             </template>
           </el-table-column>
@@ -65,7 +80,7 @@
               {{$t('job_obj.status_'+scope.row.lastRunStatus)}}
             </template>
           </el-table-column>
-          <el-table-column prop="carteJobId" label="远程节点标识" width="295">
+          <el-table-column prop="jobDesc" label="作业描述" width="280" :show-overflow-tooltip="true">
           </el-table-column>
           </el-table-column>
           <el-table-column label="操作" width="190">
@@ -135,7 +150,9 @@ export default {
       }, {
         value: 33,
         label: this.$t('job_obj.status_33')
-      }]
+      }],
+      jobParams: [],
+      showjobParams: false
     }
   },
   mounted() {
@@ -200,6 +217,20 @@ export default {
     handleCurrentChange(val) {
       this.search.currentPage = val
       this.handleSearch()
+    },
+    handleExpand(row, expanded) {
+      if (!expanded) {
+        return
+      }
+      this.$http.get('/carteJobs/params/' + row.id)
+        .then((response) => {
+          this.jobParams = response.data
+          if (this.jobParams && this.jobParams.length > 0) {
+            this.showjobParams = true
+          } else {
+            this.showjobParams = false
+          }
+        })
     }
   },
   computed: {

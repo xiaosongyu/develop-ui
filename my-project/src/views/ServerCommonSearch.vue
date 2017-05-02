@@ -4,24 +4,26 @@
       <span class="glyphicon glyphicon-th"></span> <span id="panel_head_title">采集节点列表</span>
     </div>
     <div id="tab_content" class="tab-content">
-      <div class="row panel-body tab-pane fade in active">
-        <div class="col-md-9 col-xs-6">
-          <label>节点名称：</label>
-          <el-input v-model="search.name" size="small"></el-input>
-          <label style="padding-left:20px">状态：</label>
-          <el-select v-model="search.status" placeholder="请选择">
-            <el-option v-for="item in selectStates" :label="item.label" :value="item.value" :key="item.value">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="col-md-3 col-xs-6 ">
+      <div class="panel-body tab-pane fade in active">
+        <el-row :gutter="10">
+          <el-col :sm="10" :md="8" :lg="7">
+            <label>节点名称：</label>
+            <el-input v-model="search.name" size="small"></el-input>
+          </el-col>
+          <el-col :sm="11" :md="9" :lg="8">
+            <label style="padding-left:20px">状态：</label>
+            <el-select v-model="search.status" placeholder="请选择">
+              <el-option v-for="item in selectStates" :label="item.label" :value="item.value" :key="item.value">
+              </el-option>
+            </el-select>
+          </el-col>
           <div class="pull-right">
             <el-button id="btn_query" type="primary" @click="searchTable()" icon="search">查询
             </el-button>
             <el-button id="btn_add" type="primary" @click="openServerDialog" style="margin-left:10px;" icon="plus">新增
             </el-button>
           </div>
-        </div>
+        </el-row>
       </div>
       <div class="first">
         <el-table :data="table.data" border>
@@ -103,7 +105,7 @@ export default {
 
     setInterval(function() {
       this.autoRefresh()
-    }.bind(this), 60000)
+    }.bind(this), 180000)
   },
   methods: {
     init() {

@@ -1,0 +1,10 @@
+    <template scope="scope">
+              <el-tooltip class="item" effect="light" placement="top">
+                <div slot="content">
+                  {{scope.row.jobDesc}}
+                </div>
+                <div>
+                  {{ scope.row.jobDesc.length>15 ? scope.row.jobDesc.substr(0,15)+'...' :scope.row.jobDesc }}
+                </div>
+              </el-tooltip>
+            </template>

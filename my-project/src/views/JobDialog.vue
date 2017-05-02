@@ -2,7 +2,7 @@
   <el-dialog :title="'新增作业'+step" ref="dialog">
     <el-popover ref="timeTip" placement="top-start" title="例子" width="200" trigger="hover" content="0 0 12 * * ? (每天中午12点触发)">
     </el-popover>
-    <div v-show="show">
+    <div v-show="step1">
       <el-row style="margin:5px">
         <el-col :span="7">
           <div id="panel" style="border:5px solid #d1dbe5">
@@ -31,7 +31,7 @@
         </el-col>
       </el-row>
     </div>
-    <div v-show="!show" style="margin:10px" label-position="right">
+    <div v-show="step2" style="margin:10px" label-position="right">
       <el-form :model="form" ref="form" :rules="rules">
         <el-form-item label="作业路径" style="margin-left:28px" prop="path">
           <el-input v-model="form.path" size="small" readonly style="width:230px!important"></el-input>
@@ -48,11 +48,26 @@
         </el-form-item>
       </el-form>
     </div>
+    <div v-show="step3" style="margin:10px" label-position="right">
+      <el-table :data="form.params" border>
+        <el-table-column prop="parameter" label="参数名称" min-width="130">
+        </el-table-column>
+        <el-table-column prop="defaultValue" label="默认值" width="160">
+        </el-table-column>
+        <el-table-column prop="value" label="值" width="160" class-name="column-edit">
+          <template scope="scope">
+            <el-input v-model="form.params[scope.$index].value"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="desc" label="描述" width="160">
+        </el-table-column>
+      </el-table>
+    </div>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary " @click="next" v-show="show" :disabled="nextDisable">下一步</el-button>
-      <el-button type="primary " @click="back" v-show="!show">上一步</el-button>
-      <el-button type="primary " @click="submitForm('form')" v-show="!show">保存</el-button>
-      <el-button type="primary " @click="close">退出</el-button>
+      <el-button type="primary" @click="back" v-show="backShow">上一步</el-button>
+      <el-button type="primary" @click="next" v-show="nextShow" :disabled="nextDisable">下一步</el-button>
+      <el-button type="primary" @click="submitForm('form')" v-show="saveShow">保存</el-button>
+      <el-button type="primary" @click="close">退出</el-button>
     </div>
   </el-dialog>
 </template>
@@ -65,7 +80,12 @@ export default {
   data() {
     return {
       nextDisable: true,
-      show: true,
+      step1: true,
+      step2: false,
+      step3: false,
+      nextShow: true,
+      backShow: false,
+      saveShow: false,
       currentPath: {
         path: '/'
       },
@@ -79,7 +99,8 @@ export default {
         path: '',
         jobName: '',
         cronExp: '',
-        jobDesc: ''
+        jobDesc: '',
+        params: []
       },
       defaultProps: {
         children: 'children',
@@ -122,7 +143,12 @@ export default {
     },
     clear() {
       this.nextDisable = true
-      this.show = true
+      this.step1 = true
+      this.step2 = false
+      this.step3 = false
+      this.nextShow = true
+      this.backShow = false
+      this.saveShow = false
       this.currentPath.path = '/'
       this.form.path = ''
       this.form.jobName = ''
@@ -130,10 +156,43 @@ export default {
       this.form.jobDesc = ''
     },
     next() {
-      this.form.path = this.currentRow.objectId
-      this.form.jobName = this.currentRow.name
-      this.form.jobDesc = this.currentRow.desc
-      this.show = !this.show
+      if (this.step1) {
+        this.form.path = this.currentRow.objectId
+        this.form.jobName = this.currentRow.name
+        this.form.jobDesc = this.currentRow.desc
+        this.$http.post('/carteJobs/kettle/params', this.form)
+          .then((response) => {
+            this.form.params = response.data
+            if (this.form.params && this.form.params.length > 0) {
+              this.nextShow = true
+              this.saveShow = false
+            } else {
+              this.nextShow = false
+              this.saveShow = true
+            }
+          })
+        this.step1 = false
+        this.step2 = true
+        this.backShow = true
+      } else if (this.step2) {
+        this.step2 = false
+        this.step3 = true
+        this.nextShow = false
+        this.saveShow = true
+        this.backShow = true
+      }
+    },
+    back() {
+      if (this.step2) {
+        this.step1 = true
+        this.step2 = false
+        this.backShow = false
+      } else if (this.step3) {
+        this.step2 = true
+        this.step3 = false
+      }
+      this.nextShow = true
+      this.saveShow = false
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -146,9 +205,6 @@ export default {
             })
         }
       })
-    },
-    back() {
-      this.show = !this.show
     },
     handleNodeClick(data) {
       this.currentPath = data
@@ -178,10 +234,12 @@ export default {
   },
   computed: {
     step: function() {
-      if (this.show) {
+      if (this.step1) {
         return '（选择作业文件）'
-      } else {
+      } else if (this.step2) {
         return '（作业执行明细）'
+      } else if (this.step3) {
+        return '（作业执行参数）'
       }
     }
   }

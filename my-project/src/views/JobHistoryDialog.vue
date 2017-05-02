@@ -24,7 +24,7 @@
           </el-collapse>
         </div>
         <div style="text-align: center;padding:12px">
-          <el-pagination layout="total,prev, pager, next" :total="item.table==null?0:item.table.total" :page-size="pageSize" @current-change="handleCurrentChange">
+          <el-pagination v-if="item.table&&item.table.total>0" layout="total,prev, pager, next" :total="item.table==null?0:item.table.total" :page-size="pageSize" @current-change="handleCurrentChange">
           </el-pagination>
         </div>
       </el-tab-pane>
