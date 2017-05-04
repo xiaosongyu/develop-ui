@@ -2,7 +2,7 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <img class="navbar-logo" src="/static/images/main_logo.png">
+        <img class="navbar-logo" src="../assets/images/main_logo.png">
         <a class="navbar-brand" href="#">采集管理平台</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">

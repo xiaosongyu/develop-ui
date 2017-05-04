@@ -85,11 +85,11 @@
           </el-table-column>
           <el-table-column label="操作" width="190">
             <template scope="scope">
-              <img src="/static/images/table_info.png" style="vertical-align: sub" alt="" />
+              <img src="../assets/images/table_info.png" style="vertical-align: sub" alt="" />
               <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleDetail(scope.$index, scope.row)">详情</el-button>|
-              <img src="/static/images/table_refresh.png" style="vertical-align: sub" alt="" />
+              <img src="../assets/images/table_refresh.png" style="vertical-align: sub" alt="" />
               <el-button type="text" size="small" class="click" style="margin-right:3px" @click="handleExecution(scope.$index,scope.row)">执行</el-button>|
-              <img src="/static/images/table_delete.png" style="vertical-align: sub" alt="" />
+              <img src="../assets/images/table_delete.png" style="vertical-align: sub" alt="" />
               <el-button type="text" size="small" class="click" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>

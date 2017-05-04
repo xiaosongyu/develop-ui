@@ -3,22 +3,22 @@
     <div class="panel">
       <transition appear appear-active-class="animated zoomIn">
         <div class="col-sm-3 panel-block">
-          <wn-block-chart img="/static/images/total_state.png" :value="chart.totalCount" fontColor="#6FDE6F">采集节点</wn-block-chart>
+          <wn-block-chart :img="require('../assets/images/total_state.png')" :value="chart.totalCount" fontColor="#6FDE6F">采集节点</wn-block-chart>
         </div>
       </transition>
       <transition appear appear-active-class="animated zoomIn">
         <div class="col-sm-3 panel-block">
-          <wn-block-chart img="/static/images/normal_state.png" :value="chart.normalCount" fontColor="#FFA248">正常</wn-block-chart>
+          <wn-block-chart :img="require('../assets/images/normal_state.png')" :value="chart.normalCount" fontColor="#FFA248">正常</wn-block-chart>
         </div>
       </transition>
       <transition appear appear-active-class="animated zoomIn">
         <div class="col-sm-3 panel-block">
-          <wn-block-chart img="/static/images/abnormal_state.png" :value="chart.abnormalCount" fontColor="#C698F5">采集异常</wn-block-chart>
+          <wn-block-chart :img="require('../assets/images/abnormal_state.png')" :value="chart.abnormalCount" fontColor="#C698F5">采集异常</wn-block-chart>
         </div>
       </transition>
       <transition appear appear-active-class="animated zoomIn">
         <div class="col-sm-3 panel-block">
-          <wn-block-chart img="/static/images/disconnect_state.png" :value="chart.disConnCount" fontColor="#57D2DD">未连接</wn-block-chart>
+          <wn-block-chart :img="require('../assets/images/disconnect_state.png')" :value="chart.disConnCount" fontColor="#57D2DD">未连接</wn-block-chart>
         </div>
       </transition>
       <div class="col-sm-12">
@@ -46,9 +46,6 @@ export default {
         disConnCount: 0
       }
     }
-  },
-  created() {
-    this.init()
   },
   methods: {
     init() {

@@ -81,7 +81,7 @@ devMiddleware.waitUntilValid(() => {
   _resolve()
 })
 
-var request = require('request');
+/**var request = require('request');
 app.use('*', function(req, res){
     var url = 'http://127.0.0.1:8081' + req.originalUrl;
     console.log("Proxy: " + url);
@@ -97,7 +97,7 @@ app.use('*', function(req, res){
     req.pipe(r).pipe(res);
 	}catch(e){console.log('111111111111111111111111111');
 	}
-});
+});**/
 
 var server = app.listen(port)
 
