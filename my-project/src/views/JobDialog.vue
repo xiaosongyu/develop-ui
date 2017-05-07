@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="'新增作业'+step" ref="dialog">
+  <el-dialog :title="'新增作业'+step" ref="dialog" :close-on-click-modal="false">
     <el-popover ref="timeTip" placement="top-start" title="例子" width="200" trigger="hover" content="0 0 12 * * ? (每天中午12点触发)">
     </el-popover>
     <div v-show="step1">

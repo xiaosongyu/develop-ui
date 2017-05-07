@@ -2,8 +2,8 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <img class="navbar-logo" src="../assets/images/main_logo.png">
-        <a class="navbar-brand" href="#">采集管理平台</a>
+        <img class="navbar-logo" src="../assets/images/logo.svg">
+        <a class="navbar-brand" href="#">Cobra 数据采集管理平台</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <el-menu :default-active="activeIndex" class="nav navbar-nav navbar-right" mode="horizontal" @select="handleSelect">

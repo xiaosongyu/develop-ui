@@ -1,13 +1,17 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
+var contextPath='/cobra/'
+var proxyTarget='http://127.0.0.1:8081'
 
 module.exports = {
+  contextPath:contextPath,
+
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/view/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'view',
-    assetsPublicPath: '/kangaroo/',
+    assetsPublicPath: contextPath,
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -26,14 +30,11 @@ module.exports = {
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: contextPath,
 	proxyTable: {
-     '/api': {
-    target: 'http://localhost:8081/kangaroo',
-    changeOrigin: true,
-	pathRewrite: {
-       '^/api': '/api'
-     }
+     '**/api/**': {
+    target: proxyTarget,
+    changeOrigin: true
     }
    },
     // CSS Sourcemaps off by default because relative paths are "buggy"

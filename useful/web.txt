@@ -24,3 +24,4 @@ http://vuejs-templates.github.io/webpack/commands.html
 https://cn.vuejs.org/v2/api/
 https://github.com/ElementUI/element-starter
 https://github.com/pagekit/vue-resource/blob/master/docs/http.md
+https://github.com/chimurai/http-proxy-middleware#http-proxy-options
