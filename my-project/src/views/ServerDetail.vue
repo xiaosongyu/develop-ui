@@ -202,7 +202,7 @@ export default {
           .then((response) => {
             this.init()
           })
-      })
+      }).catch(() => {})
     },
     openJobDialog(index, row) {
       this.$refs.jobDialog.open()

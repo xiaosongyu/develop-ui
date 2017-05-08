@@ -9,9 +9,9 @@
       <el-form-item prop="checkPass">
         <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
-      <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+      <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
+        <el-button type="primary" style="width:100%; margin-top:10px" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -27,7 +27,7 @@ export default {
       logining: false,
       ruleForm2: {
         account: 'admin',
-        checkPass: '123456'
+        checkPass: ''
       },
       rules2: {
         account: [{
@@ -41,26 +41,36 @@ export default {
           trigger: 'blur'
         }]
       },
-      checked: true
+      checked: true,
+      engine: null
     }
   },
   mounted: function() {
-    var image = document.getElementById('background')
-    image.onload = function() {
-      var engine = new RainyDay({
-        image: this,
-        parentElement: document.getElementById('canvas')
-      })
-      engine.rain([
-        [3, 2, 2]
-      ], 100)
-    }
-    image.crossOrigin = 'anonymous'
+    this.loadRain(this.engineCallback)
   },
-  destoyed: function() {
-
+  destroyed: function() {
+    this.engine.stop = true
   },
   methods: {
+    engineCallback() {
+      this.engine = new RainyDay({
+        image: document.getElementById('background'),
+        parentElement: document.getElementById('canvas')
+      })
+      this.engine.rain(
+        [
+          [1, 0, 20],
+          [3, 3, 1]
+        ],
+        200)
+    },
+    loadRain(callback) {
+      var img = document.getElementById('background')
+      img.onload = function() {
+        img.onload = null
+        callback()
+      }
+    },
     handleReset() {
       this.$refs.ruleForm2.resetFields()
     },
@@ -101,7 +111,10 @@ export default {
 </script>
 <style scoped>
 .login-container {
-  /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  background-clip: padding-box;
   margin: auto;
   width: 350px;
   padding: 35px 35px 15px 35px;
@@ -112,16 +125,16 @@ export default {
   top: 30%;
   text-align: center;
   overflow: hidden;
-  z-index: 99999;
+  z-index: 99;
 }
 
-.title {
+.login-container .title {
   margin: 0px auto 40px auto;
   text-align: center;
   color: #505458;
 }
 
-.remember {
+.login-container .remember {
   margin: 0px 0px 35px 0px;
 }
 
@@ -135,5 +148,9 @@ body {
 img {
   width: 100%;
   height: 100%;
+}
+
+.el-form-item__error {
+  float: right;
 }
 </style>

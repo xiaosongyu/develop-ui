@@ -37,6 +37,7 @@ export function RainyDay(options, canvas) {
   this.options = options;
 
   this.drops = [];
+  this.stop = false;
 
   // prepare canvas elements
   this.canvas = canvas || this.prepareCanvas();
@@ -74,7 +75,7 @@ RainyDay.prototype.prepareCanvas = function() {
 RainyDay.prototype.setResizeHandler = function() {
   // use setInterval if oneresize event already use by other.
   if (window.onresize !== null) {
-    window.setInterval(this.checkSize.bind(this), 100);
+    window.setInterval(this.checkSize.bind(this), 1000);
   } else {
     window.onresize = this.checkSize.bind(this);
     window.onorientationchange = this.checkSize.bind(this);
@@ -85,6 +86,9 @@ RainyDay.prototype.setResizeHandler = function() {
  * Periodically check the size of the underlying element
  */
 RainyDay.prototype.checkSize = function() {
+  if (this.stop) {
+    return
+  }
   var clientWidth = this.img.clientWidth;
   var clientHeight = this.img.clientHeight;
   var clientOffsetLeft = this.img.offsetLeft;
@@ -108,12 +112,11 @@ RainyDay.prototype.checkSize = function() {
   }
 };
 
+
 /**
  * Start animation loop
  */
-var flag = true
 RainyDay.prototype.animateDrops = function() {
-  console.log(flag)
   if (this.addDropCallback) {
     this.addDropCallback();
   }
@@ -126,9 +129,8 @@ RainyDay.prototype.animateDrops = function() {
     }
   }
   this.drops = newDrops;
-  if (flag) {
+  if (!this.stop) {
     window.requestAnimFrame(this.animateDrops.bind(this));
-    flag = false
   }
 };
 
@@ -612,7 +614,6 @@ RainyDay.prototype.prepareBackground = function() {
  * @param radius blur radius
  */
 RainyDay.prototype.stackBlurCanvasRGB = function(width, height, radius) {
-
   var shgTable = [
     [0, 9],
     [1, 11],

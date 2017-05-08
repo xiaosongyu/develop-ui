@@ -130,7 +130,7 @@ export default {
             this.$emit('change')
             this.searchTable()
           })
-      })
+      }).catch(() => {})
     },
     handleDetail(index, row) {
       this.$emit('detail', row.id, row.name)

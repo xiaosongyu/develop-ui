@@ -15,7 +15,7 @@ import './assets/js/i18n'
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(VueResource)
-
+console.log(routes)
 var router = new VueRouter({
   routes
 })
@@ -56,14 +56,22 @@ Vue.http.interceptors.push((request, next) => {
   }
   next((response) => {
     if (!response.ok) {
-      var errorMsg = '系统错误，请联系管理员'
-      if (Number.isInteger(response.data.resCode) && response.data.resCode !== 0) {
+      console.log(response)
+      var errorMsg = vm.$t('error.unkonwn_error')
+      if (response.status === 0) {
+        vm.$router.push('/login')
+        errorMsg = null
+      } else if (response.status === 504) {
+        errorMsg = vm.$t('error.server_invalid')
+      } else if (response.data && Number.isInteger(response.data.resCode) && response.data.resCode !== 0) {
         errorMsg = vm.$t('error.' + response.data.resCode)
       }
-      vm.$alert(errorMsg, '警告', {
-        confirmButtonText: '确定',
-        type: 'error'
-      })
+      if (errorMsg) {
+        vm.$alert(errorMsg, '警告', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+      }
     }
     if (loading) {
       loading.close()
