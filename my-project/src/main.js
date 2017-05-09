@@ -15,7 +15,7 @@ import './assets/js/i18n'
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(VueResource)
-console.log(routes)
+
 var router = new VueRouter({
   routes
 })

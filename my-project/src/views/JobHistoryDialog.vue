@@ -1,5 +1,5 @@
 <template>
-  <el-dialog id="history" :title="'作业执行明细('+jobName+')'" ref="dialog" size="large" top="1%">
+  <el-dialog id="history" :title="'作业执行明细('+jobName+')'" size="large" top="1%" :visible.sync="visible" :close-on-click-modal="false" :before-close="handleClose">
     <el-tabs v-model="tabValue" type="card" @tab-click="tabClick">
       <el-tab-pane v-for="(item, index) in historys" :label="item.date" :key="item.date">
         <div v-if="item.table==null||item.table.total==0" class="history" style="margin:1em;text-align:center">无执行记录</div>
@@ -15,7 +15,7 @@
                 <div class="pull-right">
                   <el-button v-if="item.finished==0" class="glyphicon glyphicon-refresh" type="primary" style="margin:1px 10px 1px 10px" @click.stop.prevent="refreshLog(item.id,index)">
                     刷新</el-button>
-                  <el-button type="primary" style="margin:1px 10px 1px 0px" @click.stop.prevent="logExport(item.id)">
+                  <el-button type="primary" style="margin:1px 4px 1px 0px" @click.stop.prevent="logExport(item.id)">
                     导出日志</el-button>
                 </div>
               </template>
@@ -29,6 +29,9 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="handleClose">退出</el-button>
+    </div>
   </el-dialog>
 </template>
 <script>
@@ -36,6 +39,7 @@ export default {
   name: 'jobHistoryDialog',
   data() {
     return {
+      visible: false,
       request: {
         loading: false
       },
@@ -54,10 +58,7 @@ export default {
   methods: {
     open() {
       this.activeName = []
-      this.$refs.dialog.open()
-    },
-    close() {
-      this.$refs.dialog.close()
+      this.visible = true
     },
     init(jobId, jobName) {
       this.jobId = jobId
@@ -130,6 +131,9 @@ export default {
         return
       }
       this.searchDetail()
+    },
+    handleClose(done) {
+      this.visible = false
     }
   }
 }

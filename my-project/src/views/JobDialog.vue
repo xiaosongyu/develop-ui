@@ -1,16 +1,16 @@
 <template>
-  <el-dialog :title="'新增作业'+step" ref="dialog" :close-on-click-modal="false">
+  <el-dialog :title="'新增作业'+step" :visible.sync="visible" :close-on-click-modal="false" :before-close="handleClose">
     <el-popover ref="timeTip" placement="top-start" title="例子" width="200" trigger="hover" content="0 0 12 * * ? (每天中午12点触发)">
     </el-popover>
     <div v-show="step1">
       <el-row style="margin:5px">
         <el-col :span="7">
-          <div id="panel" style="border:5px solid #d1dbe5">
+          <div id="panel" style="border:2px solid #d1dbe5">
             <el-tree :data="tree" :props="defaultProps" @node-click="handleNodeClick" style="height:250px" :render-content="treeRender"></el-tree>
           </div>
         </el-col>
         <el-col :span="17">
-          <div id="panel" style="border:5px solid #d1dbe5;margin-left:5px">
+          <div id="panel" style="border:2px solid #d1dbe5;margin-left:5px">
             <el-table :data="items" border style="height:250px" highlight-current-row @current-change="handleCurrentChange">
               <el-table-column label="名称" min-width="140">
                 <template scope="scope">
@@ -67,7 +67,7 @@
       <el-button type="primary" @click="back" v-show="backShow">上一步</el-button>
       <el-button type="primary" @click="next" v-show="nextShow" :disabled="nextDisable">下一步</el-button>
       <el-button type="primary" @click="submitForm('form')" v-show="saveShow">保存</el-button>
-      <el-button type="primary" @click="close">退出</el-button>
+      <el-button type="primary" @click="handleClose">退出</el-button>
     </div>
   </el-dialog>
 </template>
@@ -86,6 +86,8 @@ export default {
       nextShow: true,
       backShow: false,
       saveShow: false,
+      paramsInit: false,
+      visible: false,
       currentPath: {
         path: '/'
       },
@@ -135,13 +137,9 @@ export default {
     },
     open() {
       this.getDirTree()
-      this.$refs.dialog.open()
+      this.visible = true
     },
-    close() {
-      this.clear()
-      this.$refs.dialog.close()
-    },
-    clear() {
+    handleClose(done) {
       this.nextDisable = true
       this.step1 = true
       this.step2 = false
@@ -154,23 +152,29 @@ export default {
       this.form.jobName = ''
       this.form.cronExp = ''
       this.form.jobDesc = ''
+      this.form.params = []
+      this.paramsInit = false
+      this.visible = false
     },
     next() {
       if (this.step1) {
         this.form.path = this.currentRow.objectId
         this.form.jobName = this.currentRow.name
         this.form.jobDesc = this.currentRow.desc
-        this.$http.post('/carteJobs/kettle/params', this.form)
-          .then((response) => {
-            this.form.params = response.data
-            if (this.form.params && this.form.params.length > 0) {
-              this.nextShow = true
-              this.saveShow = false
-            } else {
-              this.nextShow = false
-              this.saveShow = true
-            }
-          })
+        if (!this.paramsInit) {
+          this.$http.post('/carteJobs/kettle/params', this.form)
+            .then((response) => {
+              this.form.params = response.data
+              if (this.form.params && this.form.params.length > 0) {
+                this.nextShow = true
+                this.saveShow = false
+              } else {
+                this.nextShow = false
+                this.saveShow = true
+              }
+              this.paramsInit = true
+            })
+        }
         this.step1 = false
         this.step2 = true
         this.backShow = true

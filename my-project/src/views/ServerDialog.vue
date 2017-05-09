@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="新增采集节点" ref="dialog" :close-on-click-modal="false">
+  <el-dialog title="新增采集节点" :visible.sync="visible" :close-on-click-modal="false" :before-close="handleClose">
     <el-form :model="form" ref="form" :rules="rules">
       <el-tabs type="border-card">
         <el-tab-pane label="节点信息">
@@ -45,7 +45,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="submitForm('form')">保存</el-button>
-      <el-button type="primary" @click="close">退出</el-button>
+      <el-button type="primary" @click="handleClose">退出</el-button>
     </div>
   </el-dialog>
 </template>
@@ -54,6 +54,7 @@ export default {
   name: 'serverDialog',
   data() {
     return {
+      visible: false,
       form: {
         name: '',
         ipAddress: '',
@@ -96,15 +97,12 @@ export default {
         }
       })
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
     open() {
-      this.$refs.dialog.open()
+      this.visible = true
     },
-    close() {
-      this.resetForm('form')
-      this.$refs.dialog.close()
+    handleClose(done) {
+      this.$refs['form'].resetFields()
+      this.visible = false
     }
   }
 }

@@ -18,6 +18,11 @@ npm install webpack --save-dev
 npm install
 npm run dev
 npm run build
+----------------update dependency---------------------------
+npm install -g npm-check-updates
+ncu   //list
+ncu -a  //update file
+npm update xxxx //update model
 
 
 http://vuejs-templates.github.io/webpack/commands.html
